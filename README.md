@@ -1,7 +1,3 @@
-TencentYoutuyun-java-sdk
-===================================
-简介
------------------------------------ 
 # TencentYoutuyun-person-face-service
 php sdk for [腾讯优图云人脸服务](http://open.youtu.qq.com/)  
 
