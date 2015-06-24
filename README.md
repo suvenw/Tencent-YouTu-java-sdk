@@ -1,5 +1,5 @@
 # TencentYoutuyun-person-face-service
-php sdk for [腾讯优图云人脸服务](http://open.youtu.qq.com/)  
+java sdk for [腾讯优图云人脸服务](http://open.youtu.qq.com/)  
 
 How to start
 ----------------------------------- 
@@ -29,6 +29,4 @@ How to start
         System.out.println(respose.getJSONArray("face").getJSONObject(0).get("yaw"));
         System.out.println(respose.getInt("errorcode"));
         System.out.println(respose.get("errormsg"));
-        
     }
-
