@@ -6,9 +6,9 @@ public class Demo {
 
 	// appid, secretid secretkey请到http://open.youtu.qq.com/注册
 	// 请把下面的APP_ID、SECRET_ID和SECRET_KEY换成你自己的数据，下面的数据已经不可用
-	public static final String APP_ID = "1000234";
-	public static final String SECRET_ID = "AKIDUIsdfDlPDt5mZutfr46sdNT0GisFcQh1nMOox";
-	public static final String SECRET_KEY = "ind5yAd55ZspBc7MCANcxsdEjuXi8YU8RL";
+	public static final String APP_ID = "1000054";
+	public static final String SECRET_ID = "AKIDqs3ba9ki8BvvswsqsDQw8d6rSSRZvcXn";
+	public static final String SECRET_KEY = "Umig8oZlynO77s9H7q19W01kzP7qnMNq";
 
 	public static void main(String[] args) {
 

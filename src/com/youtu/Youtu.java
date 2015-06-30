@@ -120,12 +120,24 @@ public class Youtu {
 
 		GetBase64FromFile(image_path, image_data);
 		data.put("image", image_data.toString());
-		//URL url = new URL(API_YOUTU_END_POINT + "detectface");
 		JSONObject respose = SendRequest(data, "detectface");
 
 		return respose;
 	}
+	
+	public JSONObject FaceShape(String image_path) throws IOException,
+			JSONException  {
 
+		StringBuffer image_data = new StringBuffer("");
+		JSONObject data = new JSONObject();
+
+		GetBase64FromFile(image_path, image_data);
+		data.put("image", image_data.toString());
+		JSONObject respose = SendRequest(data, "faceshape");
+
+		return respose;
+    }
+	
 	public JSONObject FaceCompare(String image_path_a, String image_path_b)
 			throws IOException, JSONException {
 
