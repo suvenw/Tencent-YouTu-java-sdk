@@ -59,9 +59,17 @@ if(respose.getInt("errorcode")==0){
 
 ###人脸检测
 - 接口
-`JSONObject DetectFace(String image_path)`
+`JSONObject DetectFace(String image_path,int mode)`
 - 参数
 	- `image_path` 待检测的图片路径
+	-  `mode` 是否大脸模式，默认非大脸模式
+
+###人脸配准
+- 接口
+`JSONObject FaceShape(String image_path,int mode)`
+- 参数
+	- `image_path` 待检测的图片路径
+	- `mode` 是否大脸模式，默认非大脸模式
 
 ###人脸比对
 - 接口
