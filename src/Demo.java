@@ -15,7 +15,7 @@ public class Demo {
 		try {
 			Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY);
 			
-			JSONObject respose = faceYoutu.DetectFace("test.jpg");
+			JSONObject respose = faceYoutu.DetectFace("test.jpg",0);
 			//get respose 
 			System.out.println(respose);
 			//get detail info

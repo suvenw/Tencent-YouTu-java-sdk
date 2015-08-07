@@ -112,7 +112,7 @@ public class Youtu {
 
 	}
 
-	public JSONObject DetectFace(String image_path) throws IOException,
+	public JSONObject DetectFace(String image_path,int mode) throws IOException,
 			JSONException {
 
 		StringBuffer image_data = new StringBuffer("");
@@ -120,12 +120,13 @@ public class Youtu {
 
 		GetBase64FromFile(image_path, image_data);
 		data.put("image", image_data.toString());
+		data.put("mode", mode);
 		JSONObject respose = SendRequest(data, "detectface");
 
 		return respose;
 	}
 	
-	public JSONObject FaceShape(String image_path) throws IOException,
+	public JSONObject FaceShape(String image_path,int mode) throws IOException,
 			JSONException  {
 
 		StringBuffer image_data = new StringBuffer("");
@@ -133,6 +134,7 @@ public class Youtu {
 
 		GetBase64FromFile(image_path, image_data);
 		data.put("image", image_data.toString());
+		data.put("mode", mode);
 		JSONObject respose = SendRequest(data, "faceshape");
 
 		return respose;
