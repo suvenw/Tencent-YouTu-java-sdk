@@ -88,7 +88,7 @@ public class Youtu {
 				connection.getOutputStream());
 
 		postData.put("app_id", m_appid);
-		out.writeBytes(postData.toString());
+		out.write(postData.toString().getBytes("utf-8"));
 		out.flush();
 		out.close();
 
