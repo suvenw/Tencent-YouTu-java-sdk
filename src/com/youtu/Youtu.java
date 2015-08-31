@@ -15,13 +15,14 @@ import java.io.IOException;
  * @author tyronetao
  */
 public class Youtu {
-	protected static String API_YOUTU_END_POINT = "http://api.youtu.qq.com/youtu/api/";
+	public final static  String API_YOUTU_END_POINT = "http://api.youtu.qq.com/youtu/api/";
+	public final static String API_TENCENTYUN_END_POINT = "http://youtu.api.qcloud.com/youtu/api/";
 	// 30 days
 	protected static int EXPIRED_SECONDS = 2592000;
 	protected String m_appid;
 	protected String m_secret_id;
 	protected String m_secret_key;
-
+	protected String m_end_point;
 	/**
 	 * PicCloud 构造方法
 	 * 
@@ -32,10 +33,11 @@ public class Youtu {
 	 * @param secret_key
 	 *            授权secret_key
 	 */
-	public Youtu(String appid, String secret_id, String secret_key) {
+	public Youtu(String appid, String secret_id, String secret_key,String end_point) {
 		m_appid = appid;
 		m_secret_id = secret_id;
 		m_secret_key = secret_key;
+		m_end_point=end_point;
 	}
 
 	private void GetBase64FromFile(String filePath, StringBuffer base64)
@@ -65,7 +67,7 @@ public class Youtu {
 
 		System.setProperty("sun.net.client.defaultConnectTimeout", "30000");
 		System.setProperty("sun.net.client.defaultReadTimeout", "30000");
-		URL url = new URL(API_YOUTU_END_POINT + mothod);
+		URL url = new URL(m_end_point + mothod);
 
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
