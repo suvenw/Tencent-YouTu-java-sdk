@@ -26,10 +26,13 @@ import org.json.JSONObject;
 import com.youtu.*; 
 // 请把下面的APP_ID、SECRET_ID和SECRET_KEY换成你自己的数据，下面的数据已经不可用
 public static final String APP_ID = "1000234";
-public static final String SECRET_ID = "AKIDUIsdfDlPDt5mZutfr46sdNT0GisFcQh1nMOox";
-public static final String SECRET_KEY = "ind5yAd55ZspBc7MCANcxsdEjuXi8YU8RL";
+public static final String SECRET_ID = "AKIDUIsdfDlPDt5mZT0GisFcQh1nMOox";
+public static final String SECRET_KEY = "ind5yAd55ZspBcjuXi8YU8RL";
 
-Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY);
+//优图初始化方式
+Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_YOUTU_END_POINT);
+//腾讯云初始化方式;2种初始化方式选择一种即可，优图是免费提供给大家使用的
+Youtu faceQcloud = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_TENCENTYUN_END_POINT);
 JSONObject respose = faceYoutu.DetectFace("test.jpg");
 //get respose 
 System.out.println(respose);
