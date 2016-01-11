@@ -4,56 +4,57 @@ import java.util.Random;
 
 public class YoutuSign {
 
+
 	/**
-	    app_sign    Ê±Ð§ÐÔÇ©Ãû
-	    @param  appId       http://open.youtu.qq.com/ÉÏÉêÇëµÄÒµÎñID
-	    @param  secret_id   http://open.youtu.qq.com/ÉÏÉêÇëµÄÃÜÔ¿id
-	    @param  secret_key  http://open.youtu.qq.com/ÉÏÉêÇëµÄÃÜÔ¿key
-	    @param  expired     Ç©Ãû¹ýÆÚÊ±¼ä
-	    @param  userid      ÒµÎñÕËºÅÏµÍ³,Ã»ÓÐ¿ÉÒÔ²»Ìî
-	    @param  mySign      Éú³ÉµÄÇ©Ãû
-            @return 0±íÊ¾³É¹¦
-    */
+		app_sign	æ—¶æ•ˆæ€§ç­¾å
+		@param  appId	   http://open.youtu.qq.com/ä¸Šç”³è¯·çš„ä¸šåŠ¡ID
+		@param  secret_id   http://open.youtu.qq.com/ä¸Šç”³è¯·çš„å¯†é’¥id
+		@param  secret_key  http://open.youtu.qq.com/ä¸Šç”³è¯·çš„å¯†é’¥key
+		@param  expired	 ç­¾åè¿‡æœŸæ—¶é—´
+		@param  userid	  å¼€å‘è€…qqå·
+		@param  url		 ä¿ç•™å‚æ•°
+		@param  mySign	  ç”Ÿæˆçš„ç­¾å
+			@return 0è¡¨ç¤ºæˆåŠŸ
+	*/
 	public static int appSign(String appId, String secret_id, String secret_key,
-			long expired, String userid, StringBuffer mySign) {
-		return appSignBase(appId, secret_id, secret_key, expired, "3041722595", null, mySign);
+			long expired, String userid, String url, StringBuffer mySign) {
+		return appSignBase(appId, secret_id, secret_key, expired, userid, url, mySign);
 	}
 
-    
+	
 	private static int appSignBase(String appId, String secret_id,
 			String secret_key, long expired, String userid, String url,
 			StringBuffer mySign) {
 		
 
 		if (empty(secret_id) || empty(secret_key))
-    	{
-            return -1;
-    	}
-    	
-    	String puserid = "";
-    	if (!empty(userid))
-    	{
+		{
+			return -1;
+		}
+		
+		String puserid = "";
+		if (!empty(userid))
+		{
 			if (userid.length() > 64)
 			{
-                return -2;
+				return -2;
 			}
 			puserid = userid;
-    	}
-    	
+		}
+		
 
-        long now = System.currentTimeMillis() / 1000;    
-        int rdm = Math.abs(new Random().nextInt());
-        String plain_text = "a=" + appId + "&k=" + secret_id + "&e=" + expired + "&t=" + now + "&r=" + rdm + "&u=" + puserid ;//+ "&f=" + fileid.toString();
+		long now = System.currentTimeMillis()/1000 ;
+		int rdm = Math.abs(new Random().nextInt());
+		String plain_text = "a=" + appId + "&k=" + secret_id + "&e=" + expired + "&t=" + now + "&r=" + rdm + "&u=" + puserid ;
 
-        byte[] bin = hashHmac(plain_text, secret_key);
+		byte[] bin = hashHmac(plain_text, secret_key);
 
-        byte[] all = new byte[bin.length + plain_text.getBytes().length];
-        System.arraycopy(bin, 0, all, 0, bin.length);
-        System.arraycopy(plain_text.getBytes(), 0, all, bin.length, plain_text.getBytes().length);
-        
-        mySign.append(Base64Util.encode(all));
-        
-        return 0;
+		byte[] all = new byte[bin.length + plain_text.getBytes().length];
+		System.arraycopy(bin, 0, all, 0, bin.length);
+		System.arraycopy(plain_text.getBytes(), 0, all, bin.length, plain_text.getBytes().length);
+		mySign.append(Base64Util.encode(all));	
+
+		return 0;
 	}
 
 	private static byte[] hashHmac(String plain_text, String accessKey) {
@@ -66,7 +67,7 @@ public class YoutuSign {
 		}
 	}
 
-    
+	
 	public static boolean empty(String s){
 		return s == null || s.trim().equals("") || s.trim().equals("null");
 	}

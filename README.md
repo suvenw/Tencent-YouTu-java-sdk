@@ -7,6 +7,7 @@ java sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html
 - `AppId` 平台添加应用后分配的AppId
 - `SecretId` 平台添加应用后分配的SecretId
 - `SecretKey` 平台添加应用后分配的SecretKey
+- `Userid` 开发者的QQ号
 - `签名` 接口鉴权凭证，由AppId、SecretId、SecretKey等生成，详见<http://open.youtu.qq.com/welcome/authentication>
 
 ##使用方法
@@ -22,14 +23,14 @@ java sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html
 import org.json.JSONObject;
 import com.youtu.*; 
 // 请把下面的APP_ID、SECRET_ID和SECRET_KEY换成你自己的数据，下面的数据已经不可用
-public static final String APP_ID = "1000234";
-public static final String SECRET_ID = "AKIDUIsdfDlPDt5mZT0GisFcQh1nMOox";
-public static final String SECRET_KEY = "ind5yAd55ZspBcjuXi8YU8RL";
-
+public static final String APP_ID = "xx";
+public static final String SECRET_ID = "xxx";
+public static final String SECRET_KEY = "xx";
+public static final String USER_ID = "xx";
 //优图初始化方式
-Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_YOUTU_END_POINT);
+Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, USER_ID, Youtu.API_YOUTU_END_POINT);
 //腾讯云初始化方式;2种初始化方式选择一种即可，优图是免费提供给大家使用的
-Youtu faceQcloud = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_TENCENTYUN_END_POINT);
+Youtu faceQcloud = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,USER_ID, Youtu.API_TENCENTYUN_END_POINT);
 
 //人脸检测调用示例
 JSONObject respose = faceYoutu.DetectFace("test.jpg");

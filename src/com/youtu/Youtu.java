@@ -62,6 +62,7 @@ public class Youtu {
 	private String m_appid;
 	private String m_secret_id;
 	private String m_secret_key;
+	private String m_userid;
 	private String m_end_point;
 	private boolean m_use_youtu;
 	
@@ -75,10 +76,11 @@ public class Youtu {
 	 * @param secret_key
 	 *            授权secret_key
 	 */
-	public Youtu(String appid, String secret_id, String secret_key,String end_point) {
+	public Youtu(String appid, String secret_id, String secret_key, String userid, String end_point) {
 		m_appid = appid;
 		m_secret_id = secret_id;
 		m_secret_key = secret_key;
+		m_userid = userid;
 		m_end_point=end_point;
 		m_use_youtu=!end_point.startsWith("https");
 	}
@@ -155,7 +157,7 @@ public class Youtu {
 		StringBuffer mySign = new StringBuffer("");
 		YoutuSign.appSign(m_appid, m_secret_id, m_secret_key,
 			System.currentTimeMillis() / 1000 + EXPIRED_SECONDS,
-			"", mySign);
+			m_userid, "", mySign);
 
 		System.setProperty("sun.net.client.defaultConnectTimeout", "30000");
 		System.setProperty("sun.net.client.defaultReadTimeout", "30000");
@@ -217,7 +219,7 @@ public class Youtu {
 		StringBuffer mySign = new StringBuffer("");
 		YoutuSign.appSign(m_appid, m_secret_id, m_secret_key,
 			System.currentTimeMillis() / 1000 + EXPIRED_SECONDS,
-			"", mySign);
+			m_userid, "", mySign);
 
 		System.setProperty("sun.net.client.defaultConnectTimeout", "30000");
 		System.setProperty("sun.net.client.defaultReadTimeout", "30000");

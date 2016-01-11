@@ -4,19 +4,21 @@ import com.youtu.*;
 
 public class Demo {
 
-	// appid, secretid secretkeyÇëµ½http://open.youtu.qq.com/×¢²á
-	// Çë°ÑÏÂÃæµÄAPP_ID¡¢SECRET_IDºÍSECRET_KEY»»³ÉÄã×Ô¼ºµÄÊı¾İ£¬ÏÂÃæµÄÊı¾İÒÑ¾­²»¿ÉÓÃ
-	public static final String APP_ID = "123456";
-	public static final String SECRET_ID = "AKIDyyasNMe2rDZs82axRhPx379AZfNA2oL2";
-	public static final String SECRET_KEY = "stDqHJa7NN36ZTxF4HzPaIClCIX1xlWw";
-
+	// appid, secretid secretkeyè¯·åˆ°http://open.youtu.qq.com/æ³¨å†Œ
+	// è¯·æŠŠä¸‹é¢çš„APP_IDã€SECRET_IDå’ŒSECRET_KEYæ¢æˆä½ è‡ªå·±çš„æ•°æ®ï¼Œä¸‹é¢çš„æ•°æ®å·²ç»ä¸å¯ç”¨
+	
+	public static final String APP_ID = "1006168";
+	public static final String SECRET_ID = "AKIDKG9lStYOPFxoIKopIIwNkgCictcMOcRh";
+	public static final String SECRET_KEY = "Kl2ljF7q4l0m0mNCxTnzJQfTlWVHUOf3";
+	public static final String USER_ID = "2127322016";
+	
 	public static void main(String[] args) {
 
 		try {
-			Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_YOUTU_END_POINT);
+			Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY, USER_ID, Youtu.API_YOUTU_END_POINT);
 			JSONObject respose;
 			//respose= faceYoutu.FaceCompareUrl("http://open.youtu.qq.com/content/img/slide-1.jpg","http://open.youtu.qq.com/content/img/slide-1.jpg");
-			respose = faceYoutu.DetectFace("test.jpg",1);
+			respose = faceYoutu.DetectFace("a.jpg",1);
 			//get respose 
 			System.out.println(respose);
 					
