@@ -29,26 +29,26 @@ import javax.net.ssl.X509TrustManager;
 
 
 /**
- * 
+ *
  * @author tyronetao
  */
 public class Youtu {
-	
+
 	private static class TrustAnyTrustManager implements X509TrustManager {
-		
+
 		public void checkClientTrusted(X509Certificate[] chain, String authType)
 		throws CertificateException {
 		}
-		
+
 		public void checkServerTrusted(X509Certificate[] chain, String authType)
 		throws CertificateException {
 		}
-		
+
 		public X509Certificate[] getAcceptedIssuers() {
 			return new X509Certificate[] {};
 		}
 	}
-	
+
 	private static class TrustAnyHostnameVerifier implements HostnameVerifier {
 		public boolean verify(String hostname, SSLSession session) {
 			return true;
@@ -56,19 +56,19 @@ public class Youtu {
 	}
 
 	public final static  String API_YOUTU_END_POINT = "http://api.youtu.qq.com/youtu/";
+	public final static  String API_YOUTU_CHARGE_END_POINT = "http://vip-api.youtu.qq.com/youtu/";
 	public final static String API_TENCENTYUN_END_POINT = "https://youtu.api.qcloud.com/youtu/";
 	// 30 days
 	private static int EXPIRED_SECONDS = 2592000;
 	private String m_appid;
 	private String m_secret_id;
 	private String m_secret_key;
-	private String m_userid;
 	private String m_end_point;
-	private boolean m_use_youtu;
-	
+	private boolean m_not_use_https;
+
 	/**
 	 * PicCloud 构造方法
-	 * 
+	 *
 	 * @param appid
 	 *            授权appid
 	 * @param secret_id
@@ -76,17 +76,16 @@ public class Youtu {
 	 * @param secret_key
 	 *            授权secret_key
 	 */
-	public Youtu(String appid, String secret_id, String secret_key, String userid, String end_point) {
+	public Youtu(String appid, String secret_id, String secret_key,String end_point) {
 		m_appid = appid;
 		m_secret_id = secret_id;
 		m_secret_key = secret_key;
-		m_userid = userid;
 		m_end_point=end_point;
-		m_use_youtu=!end_point.startsWith("https");
+		m_not_use_https=!end_point.startsWith("https");
 	}
-	
+
 	public String StatusText(int status) {
-		
+
 		String statusText = "UNKOWN";
 
         switch (status)
@@ -131,9 +130,9 @@ public class Youtu {
                 statusText = "GATEWAY_TIME_OUT";
                 break;
         }
-        return statusText;		
+        return statusText;
 	}
-	
+
 
 	private void GetBase64FromFile(String filePath, StringBuffer base64)
 	throws IOException {
@@ -150,14 +149,14 @@ public class Youtu {
 		}
 
 	}
-	
+
 	private JSONObject SendHttpRequest(JSONObject postData, String mothod)
 	throws IOException, JSONException, KeyManagementException, NoSuchAlgorithmException {
 
 		StringBuffer mySign = new StringBuffer("");
 		YoutuSign.appSign(m_appid, m_secret_id, m_secret_key,
 			System.currentTimeMillis() / 1000 + EXPIRED_SECONDS,
-			m_userid, "", mySign);
+			"", mySign);
 
 		System.setProperty("sun.net.client.defaultConnectTimeout", "30000");
 		System.setProperty("sun.net.client.defaultReadTimeout", "30000");
@@ -207,7 +206,7 @@ public class Youtu {
 		return respose;
 
 	}
-	
+
 
 	private  JSONObject SendHttpsRequest(JSONObject postData,String mothod)
 	throws NoSuchAlgorithmException, KeyManagementException,
@@ -215,15 +214,15 @@ public class Youtu {
 		SSLContext sc = SSLContext.getInstance("SSL");
 		sc.init(null, new TrustManager[] { new TrustAnyTrustManager() },
 			new java.security.SecureRandom());
-		
+
 		StringBuffer mySign = new StringBuffer("");
 		YoutuSign.appSign(m_appid, m_secret_id, m_secret_key,
 			System.currentTimeMillis() / 1000 + EXPIRED_SECONDS,
-			m_userid, "", mySign);
+			"", mySign);
 
 		System.setProperty("sun.net.client.defaultConnectTimeout", "30000");
 		System.setProperty("sun.net.client.defaultReadTimeout", "30000");
-		
+
 		URL url = new URL(m_end_point + mothod);
 		HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
 		connection.setSSLSocketFactory(sc.getSocketFactory());
@@ -241,7 +240,7 @@ public class Youtu {
 		connection.setInstanceFollowRedirects(true);
 		connection.setRequestProperty("Content-Type", "text/json");
 		connection.connect();
-		
+
     	// POST请求
 		DataOutputStream out = new DataOutputStream(connection.getOutputStream());
 
@@ -250,7 +249,7 @@ public class Youtu {
 		// 刷新、关闭
 		out.flush();
 		out.close();
-		
+
 		// 读取响应
 		BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		String lines;
@@ -269,7 +268,7 @@ public class Youtu {
 		return respose;
 	}
 
-	
+
 	public JSONObject DetectFace(String image_path,int mode) throws IOException,
 	JSONException, KeyManagementException, NoSuchAlgorithmException {
 
@@ -279,26 +278,26 @@ public class Youtu {
 		GetBase64FromFile(image_path, image_data);
 		data.put("image", image_data.toString());
 		data.put("mode", mode);
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/detectface"):SendHttpsRequest(data, "api/detectface");
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "api/detectface"):SendHttpsRequest(data, "api/detectface");
 
 		return respose;
 	}
-	
-	
+
+
 	public JSONObject DetectFaceUrl(String url, int mode)
 	throws IOException, JSONException, KeyManagementException,
 	NoSuchAlgorithmException {
 		JSONObject data = new JSONObject();
 		data.put("url", url);
 		data.put("mode", mode);
-		JSONObject respose = m_use_youtu ? SendHttpRequest(data, "api/detectface")
+		JSONObject respose = m_not_use_https ? SendHttpRequest(data, "api/detectface")
 		: SendHttpsRequest(data, "api/detectface");
 
 		return respose;
 	}
 
-	
-	
+
+
 	public JSONObject FaceShape(String image_path,int mode) throws IOException,
 	JSONException, KeyManagementException, NoSuchAlgorithmException  {
 
@@ -308,22 +307,22 @@ public class Youtu {
 		GetBase64FromFile(image_path, image_data);
 		data.put("image", image_data.toString());
 		data.put("mode", mode);
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/faceshape"):SendHttpsRequest(data, "api/faceshape");
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "api/faceshape"):SendHttpsRequest(data, "api/faceshape");
 
 		return respose;
 	}
-	
+
 	public JSONObject FaceShapeUrl(String url,int mode) throws IOException,
 	JSONException, KeyManagementException, NoSuchAlgorithmException  {
 
 		JSONObject data = new JSONObject();
 		data.put("url", url);
 		data.put("mode", mode);
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/faceshape"):SendHttpsRequest(data, "api/faceshape");
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "api/faceshape"):SendHttpsRequest(data, "api/faceshape");
 
 		return respose;
 	}
-	
+
 	public JSONObject FaceCompare(String image_path_a, String image_path_b)
 	throws IOException, JSONException, KeyManagementException, NoSuchAlgorithmException {
 
@@ -336,12 +335,12 @@ public class Youtu {
 
 		GetBase64FromFile(image_path_b, image_data);
 		data.put("imageB", image_data.toString());
-		
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/facecompare"):SendHttpsRequest(data, "api/facecompare");
+
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "api/facecompare"):SendHttpsRequest(data, "api/facecompare");
 
 		return respose;
 	}
-	
+
 	public JSONObject FaceCompareUrl(String urlA, String urlB)
 	throws IOException, JSONException, KeyManagementException, NoSuchAlgorithmException {
 
@@ -349,8 +348,8 @@ public class Youtu {
 
 		data.put("urlA", urlA);
 		data.put("urlB", urlB);
-		
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/facecompare"):SendHttpsRequest(data, "api/facecompare");
+
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "api/facecompare"):SendHttpsRequest(data, "api/facecompare");
 
 		return respose;
 	}
@@ -367,7 +366,7 @@ public class Youtu {
 
 		data.put("person_id", person_id);
 
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/faceverify"):SendHttpsRequest(data, "api/faceverify");
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "api/faceverify"):SendHttpsRequest(data, "api/faceverify");
 
 		return respose;
 	}
@@ -381,7 +380,7 @@ public class Youtu {
 
 		data.put("person_id", person_id);
 
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/faceverify"):SendHttpsRequest(data, "api/faceverify");
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "api/faceverify"):SendHttpsRequest(data, "api/faceverify");
 
 		return respose;
 	}
@@ -397,7 +396,7 @@ public class Youtu {
 
 		data.put("group_id", group_id);
 
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/faceidentify"):SendHttpsRequest(data, "api/faceidentify");
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "api/faceidentify"):SendHttpsRequest(data, "api/faceidentify");
 
 		return respose;
 	}
@@ -408,7 +407,7 @@ public class Youtu {
 		data.put("url", url);
 		data.put("group_id", group_id);
 
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/faceidentify"):SendHttpsRequest(data, "api/faceidentify");
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "api/faceidentify"):SendHttpsRequest(data, "api/faceidentify");
 
 		return respose;
 	}
@@ -425,7 +424,7 @@ public class Youtu {
 		data.put("person_id", person_id);
 		data.put("group_ids", group_ids);
 
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/newperson"):SendHttpsRequest(data, "api/newperson");
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "api/newperson"):SendHttpsRequest(data, "api/newperson");
 
 		return respose;
 	}
@@ -438,7 +437,7 @@ public class Youtu {
 		data.put("person_id", person_id);
 		data.put("group_ids", group_ids);
 
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/newperson"):SendHttpsRequest(data, "api/newperson");
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "api/newperson"):SendHttpsRequest(data, "api/newperson");
 
 		return respose;
 	}
@@ -450,7 +449,7 @@ public class Youtu {
 
 		data.put("person_id", person_id);
 
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/delperson"):SendHttpsRequest(data, "api/delperson");
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "api/delperson"):SendHttpsRequest(data, "api/delperson");
 
 		return respose;
 	}
@@ -471,7 +470,7 @@ public class Youtu {
 
 		data.put("person_id", person_id);
 
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/addface"):SendHttpsRequest(data, "api/addface");
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "api/addface"):SendHttpsRequest(data, "api/addface");
 
 		return respose;
 	}
@@ -479,11 +478,11 @@ public class Youtu {
 	public JSONObject AddFaceUrl(String person_id, List<String> url_arr)
 	throws IOException, JSONException, KeyManagementException, NoSuchAlgorithmException {
 		JSONObject data = new JSONObject();
-		
+
 		data.put("urls", url_arr);
 		data.put("person_id", person_id);
 
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/addface"):SendHttpsRequest(data, "api/addface");
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "api/addface"):SendHttpsRequest(data, "api/addface");
 
 		return respose;
 	}
@@ -495,7 +494,7 @@ public class Youtu {
 
 		data.put("face_ids", face_id_arr);
 		data.put("person_id", person_id);
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/delface"):SendHttpsRequest(data, "api/delface");
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "api/delface"):SendHttpsRequest(data, "api/delface");
 
 		return respose;
 
@@ -507,7 +506,7 @@ public class Youtu {
 
 		data.put("person_name", person_name);
 		data.put("person_id", person_id);
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/setinfo"):SendHttpsRequest(data, "api/setinfo");
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "api/setinfo"):SendHttpsRequest(data, "api/setinfo");
 
 		return respose;
 
@@ -518,7 +517,7 @@ public class Youtu {
 		JSONObject data = new JSONObject();
 
 		data.put("person_id", person_id);
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/getinfo"):SendHttpsRequest(data, "api/getinfo");
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "api/getinfo"):SendHttpsRequest(data, "api/getinfo");
 
 		return respose;
 	}
@@ -526,7 +525,7 @@ public class Youtu {
 	public JSONObject GetGroupIds() throws IOException, JSONException, KeyManagementException, NoSuchAlgorithmException {
 		JSONObject data = new JSONObject();
 
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/getgroupids"):SendHttpsRequest(data, "api/getgroupids");
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "api/getgroupids"):SendHttpsRequest(data, "api/getgroupids");
 
 		return respose;
 	}
@@ -536,7 +535,7 @@ public class Youtu {
 		JSONObject data = new JSONObject();
 
 		data.put("group_id", group_id);
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/getpersonids"):SendHttpsRequest(data, "api/getpersonids");
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "api/getpersonids"):SendHttpsRequest(data, "api/getpersonids");
 
 		return respose;
 	}
@@ -546,7 +545,7 @@ public class Youtu {
 		JSONObject data = new JSONObject();
 
 		data.put("person_id", person_id);
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/getfaceids"):SendHttpsRequest(data, "api/getfaceids");
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "api/getfaceids"):SendHttpsRequest(data, "api/getfaceids");
 
 		return respose;
 	}
@@ -556,7 +555,7 @@ public class Youtu {
 		JSONObject data = new JSONObject();
 
 		data.put("face_id", face_id);
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "api/getfaceinfo"):SendHttpsRequest(data, "api/getfaceinfo");
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "api/getfaceinfo"):SendHttpsRequest(data, "api/getfaceinfo");
 
 		return respose;
 	}
@@ -570,7 +569,7 @@ public class Youtu {
 		GetBase64FromFile(image_path, image_data);
 		data.put("image", image_data.toString());
 
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "imageapi/fuzzydetect"):SendHttpsRequest(data, "imageapi/fuzzydetect");
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "imageapi/fuzzydetect"):SendHttpsRequest(data, "imageapi/fuzzydetect");
 
 		return respose;
 	}
@@ -580,7 +579,7 @@ public class Youtu {
 		JSONObject data = new JSONObject();
 
 		data.put("url", url);
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "imageapi/fuzzydetect"):SendHttpsRequest(data, "imageapi/fuzzydetect");
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "imageapi/fuzzydetect"):SendHttpsRequest(data, "imageapi/fuzzydetect");
 		return respose;
 	}
 
@@ -591,7 +590,7 @@ public class Youtu {
 
 		GetBase64FromFile(image_path, image_data);
 		data.put("image", image_data.toString());
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "imageapi/fooddetect"):SendHttpsRequest(data, "imageapi/fooddetect");
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "imageapi/fooddetect"):SendHttpsRequest(data, "imageapi/fooddetect");
 		return respose;
 	}
 
@@ -600,7 +599,7 @@ public class Youtu {
 		JSONObject data = new JSONObject();
 
 		data.put("url", url);
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "imageapi/fooddetect"):SendHttpsRequest(data, "imageapi/fooddetect");
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "imageapi/fooddetect"):SendHttpsRequest(data, "imageapi/fooddetect");
 		return respose;
 	}
 
@@ -612,7 +611,7 @@ public class Youtu {
 
 		GetBase64FromFile(image_path, image_data);
 		data.put("image", image_data.toString());
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "imageapi/imagetag"):SendHttpsRequest(data, "imageapi/imagetag");
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "imageapi/imagetag"):SendHttpsRequest(data, "imageapi/imagetag");
 		return respose;
 	}
 
@@ -620,9 +619,157 @@ public class Youtu {
 	JSONException, KeyManagementException, NoSuchAlgorithmException {
 		JSONObject data = new JSONObject();
 		data.put("url", url);
-		JSONObject respose =m_use_youtu?SendHttpRequest(data, "imageapi/imagetag"):SendHttpsRequest(data, "imageapi/imagetag");
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "imageapi/imagetag"):SendHttpsRequest(data, "imageapi/imagetag");
 		return respose;
 	}
+
+
+	public JSONObject ImagePorn(String image_path,int card_type) throws IOException,
+	JSONException, KeyManagementException, NoSuchAlgorithmException {
+
+		StringBuffer image_data = new StringBuffer("");
+		JSONObject data = new JSONObject();
+
+		GetBase64FromFile(image_path, image_data);
+		data.put("image", image_data.toString());
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "imageapi/imageporn"):SendHttpsRequest(data, "imageapi/imageporn");
+		return respose;
+	}
+
+	public JSONObject ImagePornUrl(String url,int card_type) throws IOException,
+	JSONException, KeyManagementException, NoSuchAlgorithmException {
+		JSONObject data = new JSONObject();
+		data.put("url", url);
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "imageapi/imageporn"):SendHttpsRequest(data, "imageapi/imageporn");
+		return respose;
+	}
+
+	public JSONObject IdCardOcr(String image_path,int card_type) throws IOException,
+	JSONException, KeyManagementException, NoSuchAlgorithmException {
+		StringBuffer image_data = new StringBuffer("");
+		JSONObject data = new JSONObject();
+
+		GetBase64FromFile(image_path, image_data);
+		data.put("image", image_data.toString());
+		data.put("card_type", card_type);
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "ocrapi/idcardocr"):SendHttpsRequest(data, "ocrapi/idcardocr");
+		return respose;
+	}
+
+	public JSONObject IdCardOcrUrl(String url,int card_type) throws IOException,
+	JSONException, KeyManagementException, NoSuchAlgorithmException {
+		JSONObject data = new JSONObject();
+		data.put("url", url);
+		data.put("card_type", card_type);
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "ocrapi/idcardocr"):SendHttpsRequest(data, "ocrapi/idcardocr");
+		return respose;
+	}
+
+	public JSONObject NameCardOcr(String image_path,boolean retimage) throws IOException,
+	JSONException, KeyManagementException, NoSuchAlgorithmException {
+
+		StringBuffer image_data = new StringBuffer("");
+		JSONObject data = new JSONObject();
+
+		GetBase64FromFile(image_path, image_data);
+		data.put("image", image_data.toString());
+		data.put("retimage", retimage);
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "ocrapi/namecardocr"):SendHttpsRequest(data, "ocrapi/namecardocr");
+		return respose;
+	}
+
+	public JSONObject NameCardOcrUrl(String url,boolean retimage) throws IOException,
+	JSONException, KeyManagementException, NoSuchAlgorithmException {
+		JSONObject data = new JSONObject();
+		data.put("url", url);
+		data.put("retimage", retimage);
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "ocrapi/namecardocr"):SendHttpsRequest(data, "ocrapi/namecardocr");
+		return respose;
+	}
+
+
+
+	public JSONObject livegetfour() throws IOException,
+	JSONException, KeyManagementException, NoSuchAlgorithmException {
+		JSONObject data = new JSONObject();
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "openliveapi/livegetfour"):SendHttpsRequest(data, "openliveapi/livegetfour");
+		return respose;
+	}
+
+
+	public JSONObject livedetectfour(String validate_data,String video_path,String card_path,boolean compare_card) throws IOException,
+	JSONException, KeyManagementException, NoSuchAlgorithmException {
+		JSONObject data = new JSONObject();
+		data.put("validate_data", validate_data);
+
+		StringBuffer video_data = new StringBuffer("");
+		GetBase64FromFile(video_path, video_data);
+		data.put("video", video_data.toString());
+
+		if(compare_card)
+		{
+			StringBuffer card_data = new StringBuffer("");
+			GetBase64FromFile(card_path, card_data);
+			data.put("card", card_data.toString());
+			data.put("compare_flag", true);
+		}
+		else
+		{
+			data.put("compare_flag", false);
+		}
+
+
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "openliveapi/livedetectfour"):SendHttpsRequest(data, "openliveapi/livedetectfour");
+		return respose;
+	}
+
+	public JSONObject idcardlivedetectfour(String idcard_number,String idcard_name,String validate_data,String video_path) throws IOException,
+	JSONException, KeyManagementException, NoSuchAlgorithmException {
+		JSONObject data = new JSONObject();
+		data.put("idcard_number", idcard_number);
+		data.put("idcard_name", idcard_name);
+		data.put("validate_data", validate_data);
+
+		StringBuffer video_data = new StringBuffer("");
+		GetBase64FromFile(video_path, video_data);
+		data.put("video", video_data.toString());
+
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "openliveapi/idcardlivedetectfour"):SendHttpsRequest(data, "openliveapi/idcardlivedetectfour");
+		return respose;
+	}
+
+	public JSONObject idcardfacecompare(String idcard_number,String idcard_name,String image_path) throws IOException,
+	JSONException, KeyManagementException, NoSuchAlgorithmException {
+		JSONObject data = new JSONObject();
+		data.put("idcard_number", idcard_number);
+		data.put("idcard_name", idcard_name);
+		StringBuffer image_data = new StringBuffer("");
+		GetBase64FromFile(image_path, image_data);
+		data.put("image", image_data.toString());
+
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "openliveapi/idcardfacecompare"):SendHttpsRequest(data, "openliveapi/idcardfacecompare");
+		return respose;
+	}
+
+
+	public JSONObject facecomparewithwatermark(String image_path_a, String image_path_b)
+	throws IOException, JSONException, KeyManagementException, NoSuchAlgorithmException {
+
+		StringBuffer image_data = new StringBuffer("");
+		JSONObject data = new JSONObject();
+
+		GetBase64FromFile(image_path_a, image_data);
+		data.put("imageA", image_data.toString());
+		image_data.setLength(0);
+
+		GetBase64FromFile(image_path_b, image_data);
+		data.put("imageB", image_data.toString());
+
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "openliveapi/facecomparewithwatermark"):SendHttpsRequest(data, "openliveapi/facecomparewithwatermark");
+
+		return respose;
+	}
+	
 
 
 }
