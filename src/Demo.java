@@ -4,11 +4,11 @@ import com.youtu.*;
 
 public class Demo {
 
-	// appid, secretid secretkey�뵽http://open.youtu.qq.com/ע��
-	// ��������APP_ID��SECRET_ID��SECRET_KEY�������Լ�����ݣ����������Ѿ�������
-	public static final String APP_ID = "123456";
-	public static final String SECRET_ID = "AKIDyyasNMe2rDZs82axRhPx379AZfNA2oL2";
-	public static final String SECRET_KEY = "stDqHJa7NN36ZTxF4HzPaIClCIX1xlWw";
+	// appid, secretid secretkey请到http://open.youtu.qq.com/获取
+	// 请正确填写把下面的APP_ID、SECRET_ID和SECRET_KEY
+	public static final String APP_ID = "";
+	public static final String SECRET_ID = "";
+	public static final String SECRET_KEY = "";
 
 	public static void main(String[] args) {
 
@@ -17,9 +17,9 @@ public class Demo {
 			JSONObject respose;
 			//respose= faceYoutu.FaceCompareUrl("http://open.youtu.qq.com/content/img/slide-1.jpg","http://open.youtu.qq.com/content/img/slide-1.jpg");
 			respose = faceYoutu.DetectFace("test.jpg",1);
-			//get respose 
+			//get respose
 			System.out.println(respose);
-					
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
