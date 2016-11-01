@@ -167,7 +167,6 @@ public class Youtu {
 		// set header
 		connection.setRequestMethod("POST");
 		connection.setRequestProperty("accept", "*/*");
-		connection.setRequestProperty("Host", "api.youtu.qq.com");
 		connection.setRequestProperty("user-agent", "youtu-java-sdk");
 		connection.setRequestProperty("Authorization", mySign.toString());
 
@@ -230,7 +229,6 @@ public class Youtu {
      // set header
 		connection.setRequestMethod("POST");
 		connection.setRequestProperty("accept", "*/*");
-		connection.setRequestProperty("Host", "youtu.api.qcloud.com");
 		connection.setRequestProperty("user-agent", "youtu-java-sdk");
 		connection.setRequestProperty("Authorization", mySign.toString());
 
@@ -746,6 +744,7 @@ public class Youtu {
 		StringBuffer image_data = new StringBuffer("");
 		GetBase64FromFile(image_path, image_data);
 		data.put("image", image_data.toString());
+		data.put("sep", "sdf");
 
 		JSONObject respose =m_not_use_https?SendHttpRequest(data, "openliveapi/idcardfacecompare"):SendHttpsRequest(data, "openliveapi/idcardfacecompare");
 		return respose;
