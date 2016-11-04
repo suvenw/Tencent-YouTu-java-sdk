@@ -19,14 +19,14 @@ java sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html
 
 ## 使用示例
 
-import org.json.JSONObject;
-import com.youtu.*;
+import org.json.JSONObject;  
+import com.youtu.*;  
 
 ##### 设置APP 鉴权信息
-public static final String APP_ID = "your appid";
-public static final String SECRET_ID = "your secretId ";
-public static final String SECRET_KEY = "your secretKey ";
-public static final String USER_ID = "your qq ";
+public static final String APP_ID = "your appid";  
+public static final String SECRET_ID = "your secretId ";  
+public static final String SECRET_KEY = "your secretKey ";  
+public static final String USER_ID = "your qq ";  
 ##### 根据你使用的平台选择一种初始化方式
 * 优图开放平台初始化
 Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_YOUTU_END_POINT,USER_ID);
@@ -37,18 +37,18 @@ Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_YOUTU_CHARGE
 * 腾讯云初始化方式
 Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_TENCENTYUN_END_POINT,USER_ID);
 
-* 人脸检测调用示例
-JSONObject respose = faceYoutu.DetectFace("test.jpg");
-* get respose
-System.out.println(respose);
-* get detail info
-if(respose.getInt("errorcode")==0){
-    System.out.println(respose.get("image_height"));
-    System.out.println(respose.get("face"));
-    System.out.println(respose.getJSONArray("face").getJSONObject(0).get("yaw"));
-    System.out.println(respose.getInt("errorcode"));
-    System.out.println(respose.get("errormsg"));
-}
+* 人脸检测调用示例 
+JSONObject respose = faceYoutu.DetectFace("test.jpg");  
+* get respose    
+System.out.println(respose);  
+* get detail info  
+if(respose.getInt("errorcode")==0){  
+    System.out.println(respose.get("image_height"));  
+    System.out.println(respose.get("face"));  
+    System.out.println(respose.getJSONArray("face").getJSONObject(0).get("yaw"));  
+    System.out.println(respose.getInt("errorcode"));  
+    System.out.println(respose.get("errormsg"));   
+}  
 
 
 
