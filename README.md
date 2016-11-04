@@ -2,43 +2,54 @@
 
 java sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html) & [腾讯优图开放平台](http://open.youtu.qq.com)
 
-##名词
+## 名词
 
 - `AppId` 平台添加应用后分配的AppId
 - `SecretId` 平台添加应用后分配的SecretId
 - `SecretKey` 平台添加应用后分配的SecretKey
 - `签名` 接口鉴权凭证，由AppId、SecretId、SecretKey等生成，详见<http://open.youtu.qq.com/welcome/authentication>
 
-##使用方法
-```
+## 使用方法
+
 1. 下载sdk到您的目录
 	git clone https://github.com/TencentYouTu/java_sdk.git
 2. 在你的项目里引入本项目dist目录下的json.jar和youtu-java-sdk.jar包或者直接引入源码
 3. 导入包并创建Youtu对象，然后调用相应方法
-```
 
 ## 使用示例
 
+```
 import org.json.JSONObject;
 import com.youtu.*;
+```
 
 ##### 设置APP 鉴权信息
-```public static final String APP_ID = "your appid";
+```
+public static final String APP_ID = "your appid";
 public static final String SECRET_ID = "your secretId ";
 public static final String SECRET_KEY = "your secretKey ";
-public static final String USER_ID = "your qq ";```
+public static final String USER_ID = "your qq ";
+```
 ##### 根据你使用的平台选择一种初始化方式
 * 优图开放平台初始化
-```Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_YOUTU_END_POINT,USER_ID);```
+```
+Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_YOUTU_END_POINT,USER_ID);
+```
 
 * 优图开放平台核身服务初始化（**核身服务目前仅支持核身专有接口,需要联系商务开通**）
-```Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_YOUTU_CHARGE_END_POINT,USER_ID);```
+```
+Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_YOUTU_CHARGE_END_POINT,USER_ID);
+```
 
 * 腾讯云初始化方式
-```Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_TENCENTYUN_END_POINT,USER_ID);````
+```
+Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_TENCENTYUN_END_POINT,USER_ID);
+````
 
 * 人脸检测调用示例
-```JSONObject response = faceYoutu.DetectFace("test.jpg");```
+```
+JSONObject response = faceYoutu.DetectFace("test.jpg");
+```
 * 获取详细信息    
 ```
 if(response.getInt("errorcode")==0){  
