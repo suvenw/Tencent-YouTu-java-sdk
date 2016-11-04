@@ -23,35 +23,35 @@ import org.json.JSONObject;
 import com.youtu.*;
 
 ##### 设置APP 鉴权信息
-public static final String APP_ID = "your appid";
+```public static final String APP_ID = "your appid";
 public static final String SECRET_ID = "your secretId ";
 public static final String SECRET_KEY = "your secretKey ";
-public static final String USER_ID = "your qq ";
+public static final String USER_ID = "your qq ";```
 ##### 根据你使用的平台选择一种初始化方式
 * 优图开放平台初始化
-Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_YOUTU_END_POINT,USER_ID);
+```Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_YOUTU_END_POINT,USER_ID);```
 
 * 优图开放平台核身服务初始化（**核身服务目前仅支持核身专有接口,需要联系商务开通**）
-Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_YOUTU_CHARGE_END_POINT,USER_ID);
+```Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_YOUTU_CHARGE_END_POINT,USER_ID);```
 
 * 腾讯云初始化方式
-Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_TENCENTYUN_END_POINT,USER_ID);
+```Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_TENCENTYUN_END_POINT,USER_ID);````
 
 * 人脸检测调用示例
-JSONObject response = faceYoutu.DetectFace("test.jpg");
+```JSONObject response = faceYoutu.DetectFace("test.jpg");```
 * 获取详细信息    
+```
 if(response.getInt("errorcode")==0){  
     System.out.println(response.get("image_height"));  
     System.out.println(response.get("face"));  
     System.out.println(response.getJSONArray("face").getJSONObject(0).get("yaw"));  
     System.out.println(response.getInt("errorcode"));  
     System.out.println(response.get("errormsg"));  
-}  
+}
+```
 
 
-
-
-###SDK API介绍
+### SDK API介绍
 ***
 优图开放平台相关API封装，均为同步函数
 接口调用统一返回值说明
