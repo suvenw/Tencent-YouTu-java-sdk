@@ -55,8 +55,8 @@ public class Youtu {
 		}
 	}
 
-	public final static  String API_YOUTU_END_POINT = "http://api.youtu.qq.com/youtu/";
-	public final static  String API_YOUTU_CHARGE_END_POINT = "http://vip-api.youtu.qq.com/youtu/";
+	public final static  String API_YOUTU_END_POINT = "https://api.youtu.qq.com/youtu/";
+	public final static  String API_YOUTU_CHARGE_END_POINT = "https://vip-api.youtu.qq.com/youtu/";
 	public final static String API_TENCENTYUN_END_POINT = "https://youtu.api.qcloud.com/youtu/";
 	// 30 days
 	private static int EXPIRED_SECONDS = 2592000;
@@ -64,6 +64,7 @@ public class Youtu {
 	private String m_secret_id;
 	private String m_secret_key;
 	private String m_end_point;
+	private String m_user_id;
 	private boolean m_not_use_https;
 
 	/**
@@ -76,11 +77,12 @@ public class Youtu {
 	 * @param secret_key
 	 *            授权secret_key
 	 */
-	public Youtu(String appid, String secret_id, String secret_key,String end_point) {
+	public Youtu(String appid, String secret_id, String secret_key,String end_point,String user_id) {
 		m_appid = appid;
 		m_secret_id = secret_id;
 		m_secret_key = secret_key;
 		m_end_point=end_point;
+		m_user_id=user_id;
 		m_not_use_https=!end_point.startsWith("https");
 	}
 
@@ -156,7 +158,7 @@ public class Youtu {
 		StringBuffer mySign = new StringBuffer("");
 		YoutuSign.appSign(m_appid, m_secret_id, m_secret_key,
 			System.currentTimeMillis() / 1000 + EXPIRED_SECONDS,
-			"", mySign);
+			m_user_id, mySign);
 
 		System.setProperty("sun.net.client.defaultConnectTimeout", "30000");
 		System.setProperty("sun.net.client.defaultReadTimeout", "30000");
@@ -217,7 +219,7 @@ public class Youtu {
 		StringBuffer mySign = new StringBuffer("");
 		YoutuSign.appSign(m_appid, m_secret_id, m_secret_key,
 			System.currentTimeMillis() / 1000 + EXPIRED_SECONDS,
-			"", mySign);
+			m_user_id, mySign);
 
 		System.setProperty("sun.net.client.defaultConnectTimeout", "30000");
 		System.setProperty("sun.net.client.defaultReadTimeout", "30000");
@@ -687,7 +689,7 @@ public class Youtu {
 
 
 
-	public JSONObject livegetfour() throws IOException,
+	public JSONObject LiveGetFour() throws IOException,
 	JSONException, KeyManagementException, NoSuchAlgorithmException {
 		JSONObject data = new JSONObject();
 		JSONObject respose =m_not_use_https?SendHttpRequest(data, "openliveapi/livegetfour"):SendHttpsRequest(data, "openliveapi/livegetfour");
@@ -695,7 +697,7 @@ public class Youtu {
 	}
 
 
-	public JSONObject livedetectfour(String validate_data,String video_path,String card_path,boolean compare_card) throws IOException,
+	public JSONObject LiveDetectFour(String validate_data,String video_path,String card_path,boolean compare_card) throws IOException,
 	JSONException, KeyManagementException, NoSuchAlgorithmException {
 		JSONObject data = new JSONObject();
 		data.put("validate_data", validate_data);
@@ -721,7 +723,7 @@ public class Youtu {
 		return respose;
 	}
 
-	public JSONObject idcardlivedetectfour(String idcard_number,String idcard_name,String validate_data,String video_path) throws IOException,
+	public JSONObject IdcardLiveDetectfour(String idcard_number,String idcard_name,String validate_data,String video_path) throws IOException,
 	JSONException, KeyManagementException, NoSuchAlgorithmException {
 		JSONObject data = new JSONObject();
 		data.put("idcard_number", idcard_number);
@@ -736,7 +738,7 @@ public class Youtu {
 		return respose;
 	}
 
-	public JSONObject idcardfacecompare(String idcard_number,String idcard_name,String image_path) throws IOException,
+	public JSONObject IdcardFaceCompare(String idcard_number,String idcard_name,String image_path) throws IOException,
 	JSONException, KeyManagementException, NoSuchAlgorithmException {
 		JSONObject data = new JSONObject();
 		data.put("idcard_number", idcard_number);
@@ -749,26 +751,6 @@ public class Youtu {
 		JSONObject respose =m_not_use_https?SendHttpRequest(data, "openliveapi/idcardfacecompare"):SendHttpsRequest(data, "openliveapi/idcardfacecompare");
 		return respose;
 	}
-
-
-	public JSONObject facecomparewithwatermark(String image_path_a, String image_path_b)
-	throws IOException, JSONException, KeyManagementException, NoSuchAlgorithmException {
-
-		StringBuffer image_data = new StringBuffer("");
-		JSONObject data = new JSONObject();
-
-		GetBase64FromFile(image_path_a, image_data);
-		data.put("imageA", image_data.toString());
-		image_data.setLength(0);
-
-		GetBase64FromFile(image_path_b, image_data);
-		data.put("imageB", image_data.toString());
-
-		JSONObject respose =m_not_use_https?SendHttpRequest(data, "openliveapi/facecomparewithwatermark"):SendHttpsRequest(data, "openliveapi/facecomparewithwatermark");
-
-		return respose;
-	}
-	
 
 
 }

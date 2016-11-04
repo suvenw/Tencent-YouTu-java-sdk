@@ -9,11 +9,12 @@ public class Demo {
 	public static final String APP_ID = "";
 	public static final String SECRET_ID = "";
 	public static final String SECRET_KEY = "";
+	public static final String USER_ID = "";
 
 	public static void main(String[] args) {
 
 		try {
-			Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_YOUTU_END_POINT);
+			Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_YOUTU_END_POINT,USER_ID);
 			JSONObject respose;
 			//respose= faceYoutu.FaceCompareUrl("http://open.youtu.qq.com/content/img/slide-1.jpg","http://open.youtu.qq.com/content/img/slide-1.jpg");
 			respose = faceYoutu.DetectFace("test.jpg",1);

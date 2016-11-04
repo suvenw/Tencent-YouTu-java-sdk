@@ -18,24 +18,30 @@ java sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html
 ```
 
 ## 使用示例
-```
+
 import org.json.JSONObject;
-import com.youtu.*; 
-// 请把下面的APP_ID、SECRET_ID和SECRET_KEY换成你自己的数据，下面的数据已经不可用
-public static final String APP_ID = "1000234";
-public static final String SECRET_ID = "AKIDUIsdfDlPDt5mZT0GisFcQh1nMOox";
-public static final String SECRET_KEY = "ind5yAd55ZspBcjuXi8YU8RL";
+import com.youtu.*;
 
-//优图初始化方式
-Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_YOUTU_END_POINT);
-//腾讯云初始化方式;2种初始化方式选择一种即可，优图是免费提供给大家使用的
-Youtu faceQcloud = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_TENCENTYUN_END_POINT);
+##### 设置APP 鉴权信息
+public static final String APP_ID = "your appid";
+public static final String SECRET_ID = "your secretId ";
+public static final String SECRET_KEY = "your secretKey ";
+public static final String USER_ID = "your qq ";
+##### 根据你使用的平台选择一种初始化方式
+* 优图开放平台初始化
+Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_YOUTU_END_POINT,USER_ID);
 
-//人脸检测调用示例
+* 优图开放平台核身服务初始化（**核身服务目前仅支持核身专有接口,需要联系商务开通**）
+Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_YOUTU_CHARGE_END_POINT,USER_ID);
+
+* 腾讯云初始化方式
+Youtu faceYoutu = new Youtu(APP_ID, SECRET_ID, SECRET_KEY,Youtu.API_TENCENTYUN_END_POINT,USER_ID);
+
+* 人脸检测调用示例
 JSONObject respose = faceYoutu.DetectFace("test.jpg");
-//get respose 
+* get respose
 System.out.println(respose);
-//get detail info
+* get detail info
 if(respose.getInt("errorcode")==0){
     System.out.println(respose.get("image_height"));
     System.out.println(respose.get("face"));
@@ -43,11 +49,13 @@ if(respose.getInt("errorcode")==0){
     System.out.println(respose.getInt("errorcode"));
     System.out.println(respose.get("errormsg"));
 }
-```
 
 
 
-##SDK API介绍
+
+###SDK API介绍
+***
+优图开放平台相关API封装，均为同步函数
 接口调用统一返回值说明
 - 返回值类型为 `JSONObject`，具体字段参考API文档
 
@@ -98,8 +106,8 @@ if(respose.getInt("errorcode")==0){
 
 ###新建个体
 - 接口
-        `JSONObject NewPerson(String image_path, String person_id, List<String> group_ids)`
-        `JSONObject NewPersonUrl(String url, String person_id,List<String> group_ids)`
+    `JSONObject NewPerson(String image_path, String person_id, List<String> group_ids)`
+    `JSONObject NewPersonUrl(String url, String person_id,List<String> group_ids)`
 - 参数
 	- `person_id` 新建的个体id，用户指定，需要保证app_id下的唯一性
 	- `person_name` 新建的个体名称
@@ -190,8 +198,45 @@ if(respose.getInt("errorcode")==0){
 	- `url` 待检测的图片url
 	- `image_path` 待识别的图片数据路径
 
-```
-```
-更多详情和文档说明参见
-[腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
-[腾讯优图开放平台](http://open.youtu.qq.com)
+###核身SDK API介绍
+***
+优图开放平台相关核身API封装，均为同步函数，**需要联系商务开通**
+接口调用统一返回值说明
+- 返回值类型为 `JSONObject`，具体字段参考API文档
+
+###获取四字唇语
+- 接口
+`JSONObject LiveGetFour()`
+- 参数
+	- 无
+
+###带数据源四字人脸核身
+- 接口
+`JSONObject LiveDetectFour(String validate_data,String video_path,String card_path,boolean compare_card)`
+- 参数
+	- `validate_data` LiveGetFour获取的四字唇语
+	- `video_path` 视频的路径
+	- `card_path` 对比照片的路径
+	- `compare_card` 视频与照片是否进行对比，true 对比 false不对比
+
+###不带数据源四字人脸核身
+- 接口
+`JSONObject IdcardLiveDetectfour(String idcard_number,String idcard_name,String validate_data,String video_path)`
+- 参数
+	- `idcard_number` 身份证号码
+	- `idcard_name` 身份证姓名
+	- `validate_data` LiveGetFour获取的四字唇语
+	- `video_path` 视频的路径
+
+
+###不带数据源人脸对比
+- 接口
+`JSONObject IdcardFaceCompare(String idcard_number,String idcard_name,String image_path)`
+- 参数
+	- `idcard_number` 身份证号码
+	- `idcard_name` 身份证姓名
+	- `image_path` 照片的路径   
+
+####更多详情和文档说明参见
+* [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
+* [腾讯优图开放平台](http://open.youtu.qq.com)
