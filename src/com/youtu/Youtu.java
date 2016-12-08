@@ -624,7 +624,7 @@ public class Youtu {
 	}
 
 
-	public JSONObject ImagePorn(String image_path,int card_type) throws IOException,
+	public JSONObject ImagePorn(String image_path) throws IOException,
 	JSONException, KeyManagementException, NoSuchAlgorithmException {
 
 		StringBuffer image_data = new StringBuffer("");
@@ -636,7 +636,7 @@ public class Youtu {
 		return respose;
 	}
 
-	public JSONObject ImagePornUrl(String url,int card_type) throws IOException,
+	public JSONObject ImagePornUrl(String url) throws IOException,
 	JSONException, KeyManagementException, NoSuchAlgorithmException {
 		JSONObject data = new JSONObject();
 		data.put("url", url);
