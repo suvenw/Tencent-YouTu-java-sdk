@@ -298,8 +298,10 @@ if(response.getInt("errorcode")==0){
 	- `image_path` 待检测图片路径
 	- `url` 待检测图片的url
 	- `retimage` false代表不需要返回识别后图像， true代表需要返回识别后图像
+
+
+
 ***
 ####更多详情和文档说明参见
 * [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 * [腾讯优图开放平台](http://open.youtu.qq.com)
-***
