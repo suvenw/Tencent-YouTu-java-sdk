@@ -746,9 +746,18 @@ public class Youtu {
 		StringBuffer image_data = new StringBuffer("");
 		GetBase64FromFile(image_path, image_data);
 		data.put("image", image_data.toString());
-		data.put("sep", "sdf");
 
 		JSONObject respose =m_not_use_https?SendHttpRequest(data, "openliveapi/idcardfacecompare"):SendHttpsRequest(data, "openliveapi/idcardfacecompare");
+		return respose;
+	}
+	
+	public JSONObject ValidateIdcard (String idcard_number,String idcard_name) throws IOException,
+	JSONException, KeyManagementException, NoSuchAlgorithmException {
+		JSONObject data = new JSONObject();
+		data.put("idcard_number", idcard_number);
+		data.put("idcard_name", idcard_name);
+
+		JSONObject respose =m_not_use_https?SendHttpRequest(data, "openliveapi/validateidcard "):SendHttpsRequest(data, "openliveapi/validateidcard ");
 		return respose;
 	}
 

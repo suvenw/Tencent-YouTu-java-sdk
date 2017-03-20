@@ -104,6 +104,14 @@ if(response.getInt("errorcode")==0){
 	- `image_path` 照片的路径
 
 
+###### 验证身份证信息的有效性
+- 接口
+`JSONObject ValidateIdcard(String idcard_number,String idcard_name)`
+- 参数
+	- `idcard_number` 身份证号码
+	- `idcard_name` 身份证姓名
+
+
 ###### 人脸比对
 - 接口
 `JSONObject FaceCompare(String image_path_a, String image_path_b)`
