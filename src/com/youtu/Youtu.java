@@ -761,5 +761,78 @@ public class Youtu {
 		return respose;
 	}
 
+	public JSONObject GeneralOcr(String image_path) throws IOException, 
+	JSONException, KeyManagementException, NoSuchAlgorithmException {
+		JSONObject data = new JSONObject();
+		
+		StringBuffer image_data = new StringBuffer("");
+		GetBase64FromFile(image_path, image_data);
+		
+		data.put("image", image_data);
+		
+		JSONObject response = m_not_use_https ? SendHttpRequest(data, "ocrapi/generalocr") : SendHttpsRequest(data, "ocrapi/generalocr");
+		
+		return response;
+	}
 
+	public JSONObject GeneralOcrUrl(String image_url) throws IOException,
+	JSONException, KeyManagementException, NoSuchAlgorithmException {
+		JSONObject data = new JSONObject();
+
+		data.put("url", image_url);
+
+		JSONObject response = m_not_use_https ? SendHttpRequest(data, "ocrapi/generalocr") : SendHttpsRequest(data, "ocrapi/generalocr");
+		
+		return response;
+	}
+	
+	public JSONObject BcOcr(String image_path) throws IOException, 
+	JSONException, KeyManagementException, NoSuchAlgorithmException {
+		JSONObject data = new JSONObject();
+		
+		StringBuffer image_data = new StringBuffer("");
+		GetBase64FromFile(image_path, image_data);
+		
+		data.put("image", image_data);
+		
+		JSONObject response = m_not_use_https ? SendHttpRequest(data,  "ocrapi/bcocr") : SendHttpsRequest(data, "ocrapi/bcocr");
+		
+		return response;
+	}
+	
+	public JSONObject BcOcrUrl(String image_url) throws IOException, 
+	JSONException, KeyManagementException, NoSuchAlgorithmException {
+		JSONObject data = new JSONObject();
+
+		data.put("url", image_url);
+		
+		JSONObject response = m_not_use_https ? SendHttpRequest(data,  "ocrapi/bcocr") : SendHttpsRequest(data, "ocrapi/bcocr");
+		
+		return response;
+	}
+	
+	public JSONObject DriverLicenseOcr(String image_path) throws IOException, 
+	JSONException, KeyManagementException, NoSuchAlgorithmException {
+		JSONObject data = new JSONObject();
+		
+		StringBuffer image_data = new StringBuffer("");
+		GetBase64FromFile(image_path, image_data);
+		
+		data.put("image", image_data);
+		
+		JSONObject response = m_not_use_https ? SendHttpRequest(data,  "ocrapi/driverlicenseocr") : SendHttpsRequest(data, "ocrapi/driverlicenseocr");
+		
+		return response;
+	}
+	
+	public JSONObject DriverLicenseOcrUrl(String image_url) throws IOException, 
+	JSONException, KeyManagementException, NoSuchAlgorithmException {
+		JSONObject data = new JSONObject();
+
+		data.put("url", image_url);
+		
+		JSONObject response = m_not_use_https ? SendHttpRequest(data,  "ocrapi/driverlicenseocr") : SendHttpsRequest(data, "ocrapi/driverlicenseocr");
+		
+		return response;
+	}
 }
