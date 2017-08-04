@@ -308,6 +308,33 @@ if(response.getInt("errorcode")==0){
 	- `retimage` false代表不需要返回识别后图像， true代表需要返回识别后图像
 
 
+###### 通用OCR
+- 接口
+`JSONObject GeneralOcr(String image_path)`
+`JSONObject IdCardOcrUrl(String url)`
+- 参数
+	- `image_path` 待检测图片路径
+	- `url` 待检测图片的url
+
+
+###### 名片OCR
+- 接口
+`JSONObject IdCardOcr(String image_path)`
+`JSONObject IdCardOcrUrl(String url)`
+- 参数
+	- `image_path` 待检测图片路径
+	- `url` 待检测图片的url
+
+
+###### 行驶证&驾驶证OCR
+- 接口
+`JSONObject IdCardOcr(String image_path, int card_type)`
+`JSONObject IdCardOcrUrl(String url, int card_type)`
+- 参数
+	- `image_path` 待检测图片路径
+	- `url` 待检测图片的url
+	- `card_type` 0 代表输入图像是行驶证， 1代表输入图像是驾驶证
+
 
 ***
 ####更多详情和文档说明参见
