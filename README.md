@@ -311,7 +311,7 @@ if(response.getInt("errorcode")==0){
 ###### 通用OCR
 - 接口
 `JSONObject GeneralOcr(String image_path)`
-`JSONObject IdCardOcrUrl(String url)`
+`JSONObject GeneralOcrUrl(String url)`
 - 参数
 	- `image_path` 待检测图片路径
 	- `url` 待检测图片的url
@@ -319,8 +319,8 @@ if(response.getInt("errorcode")==0){
 
 ###### 名片OCR
 - 接口
-`JSONObject IdCardOcr(String image_path)`
-`JSONObject IdCardOcrUrl(String url)`
+`JSONObject BcOcr(String image_path)`
+`JSONObject BcOcrUrl(String url)`
 - 参数
 	- `image_path` 待检测图片路径
 	- `url` 待检测图片的url
@@ -328,8 +328,8 @@ if(response.getInt("errorcode")==0){
 
 ###### 行驶证&驾驶证OCR
 - 接口
-`JSONObject IdCardOcr(String image_path, int card_type)`
-`JSONObject IdCardOcrUrl(String url, int card_type)`
+`JSONObject DriverLicenseOcr(String image_path, int card_type)`
+`JSONObject DriverLicenseOcrUrl(String url, int card_type)`
 - 参数
 	- `image_path` 待检测图片路径
 	- `url` 待检测图片的url
